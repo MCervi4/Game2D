@@ -8,16 +8,19 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
-#define INIT_PLAYER_X_TILES 8
-#define INIT_PLAYER_Y_TILES 7
+#define INIT_PLAYERA_X_TILES 8
+#define INIT_PLAYERA_Y_TILES 7
 
+#define INIT_PLAYERB_X_TILES 8
+#define INIT_PLAYERB_Y_TILES 10
 
 Scene::Scene()
 {
 	map1 = NULL;
 	map2 = NULL;
 	map3 = NULL;
-	player = NULL;
+	playerA = NULL;
+	playerB = NULL;
 }
 
 Scene::~Scene()
@@ -28,8 +31,10 @@ Scene::~Scene()
 		delete map2;
 	if (map3 != NULL)
 		delete map3;
-	if(player != NULL)
-		delete player;
+	if(playerA != NULL)
+		delete playerA;
+	if (playerB != NULL)
+		delete playerB;
 }
 
 
@@ -39,10 +44,17 @@ void Scene::init()
 	map1 = TileMap::createTileMap("levels/level11.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map2 = TileMap::createTileMap("levels/level12.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map3 = TileMap::createTileMap("levels/level13.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map1->getTileSize(), INIT_PLAYER_Y_TILES * map1->getTileSize()));
-	player->setTileMap(map1);
+
+	playerA = new PlayerA();
+	playerA->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	playerA->setPosition(glm::vec2(INIT_PLAYERA_X_TILES * map1->getTileSize(), INIT_PLAYERA_Y_TILES * map1->getTileSize()));
+	playerA->setTileMap(map1);
+
+	playerB = new PlayerB();
+	playerB->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	playerB->setPosition(glm::vec2(INIT_PLAYERB_X_TILES * map1->getTileSize(), INIT_PLAYERB_Y_TILES * map1->getTileSize()));
+	playerB->setTileMap(map1);
+
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -50,7 +62,8 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	playerA->update(deltaTime);
+	playerB->update(deltaTime);
 }
 
 void Scene::render()
@@ -66,7 +79,8 @@ void Scene::render()
 	map1->render();
 	map2->render();
 	map3->render();
-	player->render();
+	playerA->render();
+	playerB->render();
 }
 
 void Scene::initShaders()
