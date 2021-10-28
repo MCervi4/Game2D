@@ -12,7 +12,7 @@
 #define INIT_PLAYERA_Y_TILES 7
 
 #define INIT_PLAYERB_X_TILES 8
-#define INIT_PLAYERB_Y_TILES 10
+#define INIT_PLAYERB_Y_TILES 20
 
 Scene::Scene()
 {
@@ -31,7 +31,7 @@ Scene::~Scene()
 		delete map2;
 	if (map3 != NULL)
 		delete map3;
-	if(playerA != NULL)
+	if (playerA != NULL)
 		delete playerA;
 	if (playerB != NULL)
 		delete playerB;

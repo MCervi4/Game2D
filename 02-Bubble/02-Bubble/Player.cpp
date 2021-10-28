@@ -16,6 +16,10 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT
 };
 
+void  Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram) {}
+
+void  Player::update(int deltaTime) {
+}
 
 void Player::render()
 {
