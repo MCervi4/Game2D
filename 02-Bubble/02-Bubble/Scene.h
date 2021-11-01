@@ -29,11 +29,11 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map1;
-	TileMap *map2;
-	TileMap *map3;
-	Player *playerA;
-	Player *playerB;
+	TileMap* map1;
+	TileMap* map2;
+	TileMap* map3;
+	Player* playerA;
+	Player* playerB;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
@@ -42,4 +42,3 @@ private:
 
 
 #endif // _SCENE_INCLUDE
-

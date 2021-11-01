@@ -8,7 +8,7 @@
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
-#define FALL_STEP -4
+#define FALL_STEP 4
 
 
 enum PlayerAnims
@@ -52,13 +52,13 @@ void PlayerB::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(2. / 9., 7. / 9.));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(6. / 9., 7. / 9.));
 
-	sprite->setAnimationSpeed(JUMP_LEFT, 40);
+	sprite->setAnimationSpeed(JUMP_LEFT, 8);
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(6. / 9., 3. / 9.));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(1. / 9., 4. / 9.));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(5. / 9., 4. / 9.));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(8. / 9., 4. / 9.));
 
-	sprite->setAnimationSpeed(JUMP_RIGHT, 40);
+	sprite->setAnimationSpeed(JUMP_RIGHT, 8);
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(5. / 9., 3. / 9.));
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0. / 9., 4. / 9.));
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(4. / 9., 4. / 9.));
@@ -75,10 +75,10 @@ void PlayerB::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if (sprite->animation() != MOVE_LEFT)
+		if (sprite->animation() != MOVE_LEFT && sprite->animation() != JUMP_LEFT && sprite->animation() != JUMP_RIGHT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map1->collisionMoveLeft(posPlayer, glm::ivec2(19, 30)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -86,10 +86,10 @@ void PlayerB::update(int deltaTime)
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if (sprite->animation() != MOVE_RIGHT)
+		if (sprite->animation() != MOVE_RIGHT && sprite->animation() != JUMP_RIGHT && sprite->animation() != JUMP_LEFT)
 			sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+		if (map1->collisionMoveRight(posPlayer, glm::ivec2(19, 30)))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
@@ -105,24 +105,35 @@ void PlayerB::update(int deltaTime)
 
 	if (bJumping)
 	{
-		jumpAngle -= JUMP_ANGLE_STEP;
+		jumpAngle += JUMP_ANGLE_STEP;
+
+		if (map1->collisionMoveUpB(posPlayer, glm::ivec2(19, 30)))
+		{
+			bJumping = false;
+		}
+
 		if (jumpAngle == 180)
 		{
 			bJumping = false;
-			posPlayer.y = startY;
 		}
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			posPlayer.y = int(startY + 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+				bJumping = !map1->collisionMoveDownB(posPlayer, glm::ivec2(19, 30), &posPlayer.y);
 		}
 	}
 	else
 	{
-		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
+		if (sprite->animation() == JUMP_LEFT)
+			sprite->changeAnimation(STAND_LEFT);
+		else if (sprite->animation() == JUMP_RIGHT)
+			sprite->changeAnimation(STAND_RIGHT);
+
+		posPlayer.y -= FALL_STEP;
+		if (map1->collisionMoveDownB(posPlayer, glm::ivec2(19, 30), &posPlayer.y))
 		{
+			posPlayer.y += FALL_STEP;
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
@@ -139,7 +150,6 @@ void PlayerB::update(int deltaTime)
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
-
 
 
 

@@ -25,7 +25,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	if(map1 != NULL)
+	if (map1 != NULL)
 		delete map1;
 	if (map2 != NULL)
 		delete map2;
@@ -41,19 +41,19 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map1 = TileMap::createTileMap("levels/level11.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map2 = TileMap::createTileMap("levels/level12.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map3 = TileMap::createTileMap("levels/level13.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map1 = TileMap::createTileMap("levels/level11.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //terra
+	map2 = TileMap::createTileMap("levels/level12.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //mata
+	map3 = TileMap::createTileMap("levels/level13.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //nomata
 
 	playerA = new PlayerA();
 	playerA->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	playerA->setPosition(glm::vec2(INIT_PLAYERA_X_TILES * map1->getTileSize(), INIT_PLAYERA_Y_TILES * map1->getTileSize()));
-	playerA->setTileMap(map1);
+	playerA->setTileMap(map1,map2,map3);
 
 	playerB = new PlayerB();
 	playerB->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	playerB->setPosition(glm::vec2(INIT_PLAYERB_X_TILES * map1->getTileSize(), INIT_PLAYERB_Y_TILES * map1->getTileSize()));
-	playerB->setTileMap(map1);
+	playerB->setTileMap(map1,map2,map3);
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -88,13 +88,13 @@ void Scene::initShaders()
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if(!vShader.isCompiled())
+	if (!vShader.isCompiled())
 	{
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if(!fShader.isCompiled())
+	if (!fShader.isCompiled())
 	{
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
@@ -103,7 +103,7 @@ void Scene::initShaders()
 	texProgram.addShader(vShader);
 	texProgram.addShader(fShader);
 	texProgram.link();
-	if(!texProgram.isLinked())
+	if (!texProgram.isLinked())
 	{
 		cout << "Shader Linking Error" << endl;
 		cout << "" << texProgram.log() << endl << endl;

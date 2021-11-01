@@ -15,12 +15,12 @@ class PlayerB : public Player
 {
 
 public:
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render();
-	
-	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+
+	void setTileMap(TileMap* tileMap1, TileMap* tileMap2, TileMap* tileMap3);
+	void setPosition(const glm::vec2& pos);
 
 
 
@@ -28,5 +28,4 @@ public:
 
 
 #endif // _PLAYERB_INCLUDE
-
 

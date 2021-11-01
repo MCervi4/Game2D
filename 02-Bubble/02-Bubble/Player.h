@@ -14,21 +14,24 @@ class Player
 {
 
 public:
-	virtual void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram) ;
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	virtual void update(int deltaTime);
 	void render();
-	
-	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+
+	void setTileMap(TileMap* tileMap1, TileMap* tileMap2, TileMap* tileMap3);
+	void setPosition(const glm::vec2& pos);
 
 
 protected:
 	bool bJumping;
+	bool death;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
-	TileMap *map;
+	Sprite* sprite;
+	TileMap* map1; //Terra
+	TileMap* map2; //Mata
+	TileMap* map3; //NoMata
 
 };
 

@@ -27,7 +27,16 @@ void Game::keyPressed(int key)
 {
 	if(key == 27) // Escape code
 		bPlay = false;
+
+	switch (key)
+	{
+	case 'r':
+		glClearColor(1.f, 0.f, 0.f, 1.f);
+		break;
+	}
+
 	keys[key] = true;
+
 }
 
 void Game::keyReleased(int key)
@@ -66,6 +75,8 @@ bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
 }
+
+
 
 
 

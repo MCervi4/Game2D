@@ -26,9 +26,11 @@ void Player::render()
 	sprite->render();
 }
 
-void Player::setTileMap(TileMap* tileMap)
+void Player::setTileMap(TileMap* tileMap1, TileMap* tileMap2, TileMap* tileMap3)
 {
-	map = tileMap;
+	map1 = tileMap1;
+	map2 = tileMap2;
+	map3 = tileMap3;
 }
 
 void Player::setPosition(const glm::vec2& pos)
@@ -36,7 +38,6 @@ void Player::setPosition(const glm::vec2& pos)
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
-
 
 
 
