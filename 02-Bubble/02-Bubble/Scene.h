@@ -22,8 +22,11 @@ public:
 	~Scene();
 
 	void init();
+	void loadLevel(int level);
 	void update(int deltaTime);
 	void render();
+	void switchGodmode();
+	void setLevel(const int& lvl);
 
 private:
 	void initShaders();
@@ -37,6 +40,8 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+
+	int currentLevel;
 
 };
 

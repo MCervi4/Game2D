@@ -30,10 +30,37 @@ void Game::keyPressed(int key)
 
 	switch (key)
 	{
-	case 'r':
-		glClearColor(1.f, 0.f, 0.f, 1.f);
+	case '1':
+		scene.loadLevel(1);
+		scene.setLevel(1);
+		break;
+
+	case '2':
+		scene.loadLevel(2);
+		scene.setLevel(2);
+		break;
+
+	case '3':
+		scene.loadLevel(3);
+		scene.setLevel(3);
+		break;
+
+	case '4':
+		scene.loadLevel(4);
+		scene.setLevel(4);
+		break;
+
+	case '5':
+		scene.loadLevel(5);
+		scene.setLevel(5);
+		break;
+
+	case 'g':
+		scene.switchGodmode();
 		break;
 	}
+
+
 
 	keys[key] = true;
 

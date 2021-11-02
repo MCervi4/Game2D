@@ -30,10 +30,12 @@ public:
 
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool collisionMoveDownA(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
-	bool collisionMoveDownB(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+	bool collisionMoveDownA(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool& damuntMeta) const;
+	bool collisionMoveDownB(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool& damuntMeta) const;
 	bool collisionMoveUpA(const glm::ivec2& pos, const glm::ivec2& size) const;
 	bool collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool deathcollision(const glm::ivec2& pos, const glm::ivec2& size, const bool& godMode) const;
+
 
 private:
 	bool loadLevel(const string& levelFile);

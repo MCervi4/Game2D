@@ -40,20 +40,31 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	currentLevel = 1;
+	loadLevel(currentLevel);
+}
+
+void Scene::loadLevel(int level) {
+	string lvl = to_string(level);
+
+	string loadedMap1 = "levels/level" + lvl + "1.txt";
+	string loadedMap2 = "levels/level" + lvl + "2.txt";
+	string loadedMap3 = "levels/level" + lvl + "3.txt";
+
 	initShaders();
-	map1 = TileMap::createTileMap("levels/level11.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //terra
-	map2 = TileMap::createTileMap("levels/level12.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //mata
-	map3 = TileMap::createTileMap("levels/level13.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //nomata
+	map1 = TileMap::createTileMap(loadedMap1, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //terra
+	map2 = TileMap::createTileMap(loadedMap2, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //mata
+	map3 = TileMap::createTileMap(loadedMap3, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //nomata
 
 	playerA = new PlayerA();
 	playerA->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	playerA->setPosition(glm::vec2(INIT_PLAYERA_X_TILES * map1->getTileSize(), INIT_PLAYERA_Y_TILES * map1->getTileSize()));
-	playerA->setTileMap(map1,map2,map3);
+	playerA->setTileMap(map1, map2, map3);
 
 	playerB = new PlayerB();
 	playerB->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	playerB->setPosition(glm::vec2(INIT_PLAYERB_X_TILES * map1->getTileSize(), INIT_PLAYERB_Y_TILES * map1->getTileSize()));
-	playerB->setTileMap(map1,map2,map3);
+	playerB->setTileMap(map1, map2, map3);
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -64,6 +75,13 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	playerA->update(deltaTime);
 	playerB->update(deltaTime);
+
+	if (playerA->isDeath() || playerB->isDeath()) loadLevel(currentLevel);
+
+	if (playerA->getDamuntMeta()) {
+		if (currentLevel == 5) loadLevel(currentLevel = 1);
+		else  loadLevel(++currentLevel);
+	}
 }
 
 void Scene::render()
@@ -111,6 +129,15 @@ void Scene::initShaders()
 	texProgram.bindFragmentOutput("outColor");
 	vShader.free();
 	fShader.free();
+}
+
+void Scene::switchGodmode() {
+	playerA->switchGodmode();
+	playerB->switchGodmode();
+}
+
+void Scene::setLevel(const int& lvl) {
+	currentLevel = lvl;
 }
 
 

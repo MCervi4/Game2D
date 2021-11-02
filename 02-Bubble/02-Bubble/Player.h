@@ -20,11 +20,15 @@ public:
 
 	void setTileMap(TileMap* tileMap1, TileMap* tileMap2, TileMap* tileMap3);
 	void setPosition(const glm::vec2& pos);
+	void switchGodmode();
+
+	bool getDamuntMeta();
+	bool isDeath();
 
 
 protected:
-	bool bJumping;
-	bool death;
+	bool bJumping, damuntMeta, death, godMode;
+
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
@@ -32,6 +36,7 @@ protected:
 	TileMap* map1; //Terra
 	TileMap* map2; //Mata
 	TileMap* map3; //NoMata
+
 
 };
 

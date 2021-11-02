@@ -170,7 +170,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) c
 {
 	int x, y0, y1;
 
-	x = (pos.x + size.x) / (tileSize);
+	x = (pos.x + 20) / (tileSize);
 	y0 = (pos.y) / tileSize;
 	y1 = (pos.y + size.y) / tileSize;
 	for (int y = y0; y <= y1; y++)
@@ -186,7 +186,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 {
 	int x, y0, y1;
 
-	x = (pos.x + size.x+11) / tileSize;
+	x = (pos.x + 20 + size.x) / tileSize;
 	y0 = (pos.y) / tileSize;
 	y1 = (pos.y + size.y) / tileSize;
 	for (int y = y0; y <= y1; y++)
@@ -198,20 +198,24 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 	return false;
 }
 
-bool TileMap::collisionMoveDownA(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::collisionMoveDownA(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool &damuntMeta) const
 {
 	int x0, x1, y;
 
-	x0 = (pos.x + size.x) / tileSize;
-	x1 = (pos.x + size.x+11) / tileSize;
-	y = (pos.y + size.y) / tileSize;
+	x0 = (pos.x + 20) / tileSize;
+	x1 = (pos.x + 20 + size.x) / tileSize;
+	y = ((pos.y + size.y) / tileSize);
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] != 0)
 		{
-			if (*posY - tileSize * y + size.y <= 4)
+			
+			if (map[y * mapSize.x + x] == 81) damuntMeta = true;
+			else damuntMeta = false;
+
+			if (*posY - tileSize * y  <= 4)
 			{
-				*posY = tileSize * y - size.y - 4;
+				*posY = tileSize * y - size.y - 4 ;
 				return true;
 			}
 		}
@@ -220,28 +224,31 @@ bool TileMap::collisionMoveDownA(const glm::ivec2& pos, const glm::ivec2& size, 
 	return false;
 }
 
-bool TileMap::collisionMoveDownB(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::collisionMoveDownB(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool& damuntMeta) const
 {
 	int x0, x1, y;
 
-	x0 = (pos.x + size.x) / tileSize;
-	x1 = (pos.x + size.x + 11) / tileSize;
-	y = (pos.y-4) / tileSize;
+	x0 = (pos.x + 11) / tileSize;
+	x1 = (pos.x + 11 + size.x ) / tileSize;
+	y = (pos.y - size.y) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] != 0)
 		{
+			if (map[y * mapSize.x + x] == 153) damuntMeta = true;
+			else damuntMeta = false;
+
 			return true;
 		}
 	}
 
-	return false;
+	return false; 
 
 	/*int x0, x1, y;
 
-	x0 = (pos.x + size.x) / tileSize;
-	x1 = (pos.x + size.x + 11) / tileSize;
-	y = (pos.y) / tileSize;
+	x0 = (pos.x + 20) / tileSize;
+	x1 = (pos.x + 20 + size.x) / tileSize;
+	y = (pos.y + 10) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] != 0)
@@ -286,6 +293,30 @@ bool TileMap::collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size) co
 	{
 		if (map[y * mapSize.x + x] != 0)
 			return true;
+	}
+
+	return false;
+}
+
+bool TileMap::deathcollision(const glm::ivec2& pos, const glm::ivec2& size, const bool& godMode) const
+{
+	if (godMode) return false;
+
+	int x0, x1, y0, y1;
+
+	x0 = (pos.x + size.x) / tileSize;
+	x1 = (pos.x + size.x + 11) / tileSize;
+	y0 = (pos.y) / tileSize;
+	y1 = (pos.y + size.y) / tileSize;
+
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y0 * mapSize.x + x] != 0 || map[y1 * mapSize.x + x] != 0) return true;
+	}
+
+	for (int y = y0; y <= y1; y++)
+	{
+		if (map[y * mapSize.x + x0] != 0 || map[y * mapSize.x + x1] != 0) return true;
 	}
 
 	return false;

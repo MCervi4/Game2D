@@ -20,6 +20,9 @@ enum PlayerAnims
 void PlayerB::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
+	damuntMeta = false;
+	death = false;
+
 	spritesheet.loadFromFile("images/messi.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(40, 40), glm::vec2(1. / 9., 1. / 9.), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(6);
@@ -73,12 +76,15 @@ void PlayerB::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void PlayerB::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+
+	death = map2->deathcollision(posPlayer, glm::ivec2(11, 30), godMode);
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if (sprite->animation() != MOVE_LEFT && sprite->animation() != JUMP_LEFT && sprite->animation() != JUMP_RIGHT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
-		if (map1->collisionMoveLeft(posPlayer, glm::ivec2(19, 30)))
+		if (map1->collisionMoveLeft(posPlayer, glm::ivec2(11, 30)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -89,7 +95,7 @@ void PlayerB::update(int deltaTime)
 		if (sprite->animation() != MOVE_RIGHT && sprite->animation() != JUMP_RIGHT && sprite->animation() != JUMP_LEFT)
 			sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
-		if (map1->collisionMoveRight(posPlayer, glm::ivec2(19, 30)))
+		if (map1->collisionMoveRight(posPlayer, glm::ivec2(11, 30)))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
@@ -107,7 +113,7 @@ void PlayerB::update(int deltaTime)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
 
-		if (map1->collisionMoveUpB(posPlayer, glm::ivec2(19, 30)))
+		if (map1->collisionMoveUpB(posPlayer, glm::ivec2(11, 30)))
 		{
 			bJumping = false;
 		}
@@ -120,7 +126,7 @@ void PlayerB::update(int deltaTime)
 		{
 			posPlayer.y = int(startY + 96 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map1->collisionMoveDownB(posPlayer, glm::ivec2(19, 30), &posPlayer.y);
+				bJumping = !map1->collisionMoveDownB(posPlayer, glm::ivec2(11, 30), &posPlayer.y, damuntMeta);
 		}
 	}
 	else
@@ -131,7 +137,7 @@ void PlayerB::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 
 		posPlayer.y -= FALL_STEP;
-		if (map1->collisionMoveDownB(posPlayer, glm::ivec2(19, 30), &posPlayer.y))
+		if (map1->collisionMoveDownB(posPlayer, glm::ivec2(11, 30), &posPlayer.y, damuntMeta))
 		{
 			posPlayer.y += FALL_STEP;
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
