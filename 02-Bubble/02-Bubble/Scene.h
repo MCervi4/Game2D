@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "PlayerA.h"
 #include "PlayerB.h"
+#include "Menu.h"
 
 
 // Scene contains all the entities of our game.
@@ -23,6 +24,7 @@ public:
 
 	void init();
 	void loadLevel(int level);
+	void loadMenu();
 	void update(int deltaTime);
 	void render();
 	void switchGodmode();
@@ -32,6 +34,8 @@ private:
 	void initShaders();
 
 private:
+	Menu menu;
+
 	TileMap* map1;
 	TileMap* map2;
 	TileMap* map3;
