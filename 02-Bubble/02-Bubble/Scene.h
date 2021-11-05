@@ -9,6 +9,7 @@
 #include "PlayerA.h"
 #include "PlayerB.h"
 #include "Menu.h"
+#include "TexturedQuad.h"
 
 
 // Scene contains all the entities of our game.
@@ -34,6 +35,7 @@ private:
 	void initShaders();
 
 private:
+
 	Menu menu;
 
 	TileMap* map1;
@@ -44,6 +46,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+
 
 	int currentLevel;
 

@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include <iostream>
 
 
 //Remove console (only works in Visual Studio)
@@ -45,6 +46,7 @@ static void specialUpCallback(int key, int x, int y)
 
 static void motionCallback(int x, int y)
 {
+	std::cout << x << ' ' << y << endl;
 	Game::instance().mouseMove(x, y);
 }
 
@@ -52,9 +54,13 @@ static void motionCallback(int x, int y)
 
 static void mouseCallback(int button, int state, int x, int y)
 {
-	if(state == GLUT_DOWN)
+	std::cout << x << ' ' << y << std::endl;
+	if (state == GLUT_DOWN) {
 		Game::instance().mousePress(button);
-	else if(state == GLUT_UP)
+		
+	}
+		
+	else if (state == GLUT_UP)
 		Game::instance().mouseRelease(button);
 }
 
@@ -68,11 +74,11 @@ static void idleCallback()
 {
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	int deltaTime = currentTime - prevTime;
-	
-	if(deltaTime > TIME_PER_FRAME)
+
+	if (deltaTime > TIME_PER_FRAME)
 	{
 		// Every time we enter here is equivalent to a game loop execution
-		if(!Game::instance().update(deltaTime))
+		if (!Game::instance().update(deltaTime))
 			exit(0);
 		prevTime = currentTime;
 		glutPostRedisplay();
@@ -80,7 +86,7 @@ static void idleCallback()
 }
 
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	// GLUT initialization
 	glutInit(&argc, argv);
@@ -101,7 +107,7 @@ int main(int argc, char **argv)
 	// GLEW will take care of OpenGL extension functions
 	glewExperimental = GL_TRUE;
 	glewInit();
-	
+
 	// Game instance initialization
 	Game::instance().init();
 	prevTime = glutGet(GLUT_ELAPSED_TIME);
@@ -110,6 +116,5 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
 
 
