@@ -46,7 +46,6 @@ static void specialUpCallback(int key, int x, int y)
 
 static void motionCallback(int x, int y)
 {
-	std::cout << x << ' ' << y << endl;
 	Game::instance().mouseMove(x, y);
 }
 
@@ -54,12 +53,11 @@ static void motionCallback(int x, int y)
 
 static void mouseCallback(int button, int state, int x, int y)
 {
-	std::cout << x << ' ' << y << std::endl;
 	if (state == GLUT_DOWN) {
-		Game::instance().mousePress(button);
-		
+		Game::instance().mousePress(button, x, y);
+
 	}
-		
+
 	else if (state == GLUT_UP)
 		Game::instance().mouseRelease(button);
 }
@@ -116,5 +114,4 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
 

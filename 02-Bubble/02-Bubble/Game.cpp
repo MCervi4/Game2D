@@ -1,18 +1,30 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include <iostream>
+#include <cmath>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init();
+
+	initShaders();
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+
+	gamestate = MENU;
+
+	//scene.init(texProgram);
+	menu.init(texProgram);
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	currentTime += deltaTime;
+
+	if (gamestate == SCENE) scene.update(deltaTime);
 	
 	return bPlay;
 }
@@ -20,8 +32,51 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+
+	glm::mat4 modelview;
+
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	if (gamestate == MENU) menu.render();
+	if (gamestate == SCENE) scene.render();
+	
 }
+
+void Game::initShaders()
+{
+	Shader vShader, fShader;
+
+	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
+	if (!vShader.isCompiled())
+	{
+		cout << "Vertex Shader Error" << endl;
+		cout << "" << vShader.log() << endl << endl;
+	}
+	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
+	if (!fShader.isCompiled())
+	{
+		cout << "Fragment Shader Error" << endl;
+		cout << "" << fShader.log() << endl << endl;
+	}
+	texProgram.init();
+	texProgram.addShader(vShader);
+	texProgram.addShader(fShader);
+	texProgram.link();
+	if (!texProgram.isLinked())
+	{
+		cout << "Shader Linking Error" << endl;
+		cout << "" << texProgram.log() << endl << endl;
+	}
+	texProgram.bindFragmentOutput("outColor");
+	vShader.free();
+	fShader.free();
+}
+
 
 void Game::keyPressed(int key)
 {
@@ -31,28 +86,28 @@ void Game::keyPressed(int key)
 	switch (key)
 	{
 	case '1':
-		scene.loadLevel(1);
-		scene.setLevel(1);
+		gamestate = SCENE;
+		scene.init(texProgram, 1);
 		break;
 
 	case '2':
-		scene.loadLevel(2);
-		scene.setLevel(2);
+		gamestate = SCENE;
+		scene.init(texProgram, 2);
 		break;
 
 	case '3':
-		scene.loadLevel(3);
-		scene.setLevel(3);
+		gamestate = SCENE;
+		scene.init(texProgram, 3);
 		break;
 
 	case '4':
-		scene.loadLevel(4);
-		scene.setLevel(4);
+		gamestate = SCENE;
+		scene.init(texProgram, 4);
 		break;
 
 	case '5':
-		scene.loadLevel(5);
-		scene.setLevel(5);
+		gamestate = SCENE;
+		scene.init(texProgram, 5);
 		break;
 
 	case 'g':
@@ -85,8 +140,22 @@ void Game::mouseMove(int x, int y)
 {
 }
 
-void Game::mousePress(int button)
+void Game::mousePress(int button, int x, int y)
 {
+	if (gamestate == MENU)
+	{
+		if (button == 0)
+		{
+			int whereToGo = menu.whereToGo(x, y);
+			switch (whereToGo)
+			{
+			case 1:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			}
+		}
+	}
 }
 
 void Game::mouseRelease(int button)

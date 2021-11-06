@@ -23,20 +23,18 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
-	void loadLevel(int level);
-	void loadMenu();
+	void init(ShaderProgram game_texprogram, int lvl);
 	void update(int deltaTime);
 	void render();
 	void switchGodmode();
 	void setLevel(const int& lvl);
 
 private:
-	void initShaders();
+	//void initShaders();
 
 private:
 
-	Menu menu;
+	//Menu menu;
 
 	TileMap* map1;
 	TileMap* map2;
@@ -44,8 +42,8 @@ private:
 	Player* playerA;
 	Player* playerB;
 	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
+	//float currentTime;
+	//glm::mat4 projection;
 
 
 	int currentLevel;
