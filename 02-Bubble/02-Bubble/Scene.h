@@ -29,6 +29,15 @@ public:
 	void switchGodmode();
 	void setLevel(const int& lvl);
 
+	float getPlayerAPosX();
+	float getPlayerBPosX();
+
+	float getPlayerAPosY();
+	float getPlayerBPosY();
+
+	float getPlayersPosX();
+	float getPlayersPosY();
+
 private:
 	//void initShaders();
 

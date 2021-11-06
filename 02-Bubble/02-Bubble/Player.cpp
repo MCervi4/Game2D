@@ -51,5 +51,14 @@ void Player::switchGodmode() {
 	godMode = !godMode;
 }
 
+float Player::getPosX() {
+	return posPlayer.x;
+}
+
+float Player::getPosY() {
+	return posPlayer.y;
+}
+
+
 
 

@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -11,8 +12,15 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
+	iniWidth = 0.f;
+	finWidth = float(SCREEN_WIDTH - 1);
+	finHeight = float(SCREEN_HEIGHT - 1);
+	iniHeight = 0.f;
+
 	initShaders();
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	projection = glm::ortho(iniWidth, finWidth, finHeight, iniHeight);
+	//projection = glm::ortho(0.f, float(max(SCREEN_WIDTH - 1), POSICIO JUGADOR 1), float(max(SCREEN_HEIGHT - 1), POSICIO JUGADOR 2), 0.f);
+	//projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	gamestate = MENU;
 
@@ -24,7 +32,28 @@ bool Game::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (gamestate == SCENE) scene.update(deltaTime);
+	if (gamestate == SCENE) {
+		scene.update(deltaTime);
+
+		float playersPosX = scene.getPlayersPosX();// +float(SCREEN_WIDTH) / 10.f;
+		float playersPosY = scene.getPlayersPosY();// +float(SCREEN_HEIGHT) / 10.f;
+
+		iniWidth = playersPosX - float(SCREEN_WIDTH) * 0.6f;
+		finWidth = playersPosX + float(SCREEN_WIDTH) * 0.6f;
+
+		iniHeight = playersPosY - float(SCREEN_HEIGHT) * 0.6f;
+		finHeight = playersPosY + float(SCREEN_HEIGHT) * 0.6f;
+
+		projection = glm::ortho(iniWidth, finWidth, finHeight, iniHeight);
+	}
+	else {
+		iniWidth = 0.f;
+		finWidth = float(SCREEN_WIDTH - 1);
+		iniHeight = float(SCREEN_HEIGHT - 1);
+		finHeight = 0.f;
+
+		projection = glm::ortho(iniWidth, finWidth, iniHeight, finHeight);
+	}
 	
 	return bPlay;
 }
@@ -43,38 +72,11 @@ void Game::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	if (gamestate == MENU) menu.render();
-	if (gamestate == SCENE) scene.render();
+	else if (gamestate == SCENE) scene.render();
+	else if (gamestate == INSTR) instr.render();
+	else if (gamestate == LEVELS) levels.render();
+	else if (gamestate == CRED) credits.render();
 	
-}
-
-void Game::initShaders()
-{
-	Shader vShader, fShader;
-
-	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if (!vShader.isCompiled())
-	{
-		cout << "Vertex Shader Error" << endl;
-		cout << "" << vShader.log() << endl << endl;
-	}
-	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if (!fShader.isCompiled())
-	{
-		cout << "Fragment Shader Error" << endl;
-		cout << "" << fShader.log() << endl << endl;
-	}
-	texProgram.init();
-	texProgram.addShader(vShader);
-	texProgram.addShader(fShader);
-	texProgram.link();
-	if (!texProgram.isLinked())
-	{
-		cout << "Shader Linking Error" << endl;
-		cout << "" << texProgram.log() << endl << endl;
-	}
-	texProgram.bindFragmentOutput("outColor");
-	vShader.free();
-	fShader.free();
 }
 
 
@@ -149,9 +151,24 @@ void Game::mousePress(int button, int x, int y)
 			int whereToGo = menu.whereToGo(x, y);
 			switch (whereToGo)
 			{
-			case 1:
+			case 0:	//menu
+				break;
+			case 1: //start
 				gamestate = SCENE;
 				scene.init(texProgram, whereToGo);
+				break;
+			case 2: //howtoplay
+				gamestate =	INSTR;
+				instr.init(texProgram);
+				break;
+			case 3: //levels
+				gamestate = LEVELS;
+				levels.init(texProgram);
+				break;
+			case 4: //exit
+				bPlay = false;
+				break;
+			default:
 				break;
 			}
 		}
@@ -172,6 +189,35 @@ bool Game::getSpecialKey(int key) const
 	return specialKeys[key];
 }
 
+void Game::initShaders()
+{
+	Shader vShader, fShader;
+
+	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
+	if (!vShader.isCompiled())
+	{
+		cout << "Vertex Shader Error" << endl;
+		cout << "" << vShader.log() << endl << endl;
+	}
+	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
+	if (!fShader.isCompiled())
+	{
+		cout << "Fragment Shader Error" << endl;
+		cout << "" << fShader.log() << endl << endl;
+	}
+	texProgram.init();
+	texProgram.addShader(vShader);
+	texProgram.addShader(fShader);
+	texProgram.link();
+	if (!texProgram.isLinked())
+	{
+		cout << "Shader Linking Error" << endl;
+		cout << "" << texProgram.log() << endl << endl;
+	}
+	texProgram.bindFragmentOutput("outColor");
+	vShader.free();
+	fShader.free();
+}
 
 
 

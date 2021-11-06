@@ -25,6 +25,9 @@ public:
 	bool getDamuntMeta();
 	bool isDeath();
 
+	float getPosX();
+	float getPosY();
+
 
 protected:
 	bool bJumping, damuntMeta, death, godMode;

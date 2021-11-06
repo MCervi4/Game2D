@@ -110,3 +110,27 @@ void Scene::setLevel(const int& lvl) {
 	currentLevel = lvl;
 }
 
+float Scene::getPlayerAPosX() {
+	return playerA->getPosX();
+}
+
+float Scene::getPlayerBPosX() {
+	return playerB->getPosY();
+}
+
+float Scene::getPlayerAPosY() {
+	return playerA->getPosY();
+}
+
+float Scene::getPlayerBPosY() {
+	return playerB->getPosY();
+}
+
+float Scene::getPlayersPosX() {
+	return (playerA->getPosX() + playerB->getPosX()) / 2.f;
+}
+
+float Scene::getPlayersPosY() {
+	return (playerA->getPosY() + playerB->getPosY()) / 2.f;
+
+}

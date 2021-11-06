@@ -21,9 +21,12 @@ private:
 
 	//SoundManager sound;
 	//Quad* quad;
-	Texture texs[3];
-	TexturedQuad* texQuad[10];
-	Button boto;
+	Texture texs[2];
+	TexturedQuad* texQuad[2];
+	Button start;
+	Button howtoplay;
+	Button levels;
+	Button exit;
 	//glm::mat4 projection;
 
 };

@@ -3,15 +3,21 @@
 
 
 #include "Scene.h"
+#include "Instructions.h"
+#include "Credits.h"
+#include "Levels.h"
 
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
-
+#define JUMP_ANGLE_STEP 4
+#define JUMP_HEIGHT 20
+#define FALL_STEP 4
+#define ASPECT_RATIO 1.33f
 
 // Game is a singleton (a class with a single instance) that represents our whole application
 
-enum GameState {MENU, SCENE, INSTR, CRED};
+enum GameState {MENU, SCENE, INSTR, CRED, LEVELS};
 
 class Game
 {
@@ -49,8 +55,13 @@ private:
 private:
 
 	bool bPlay;                       // Continue to play game?
-	Scene scene;                      // Scene to render
+
+	//Diferents parts del joc
+	Scene scene;                      
 	Menu menu;
+	Instructions instr;
+	Credits credits;
+	Levels levels;
 	
 	GameState gamestate;
 	bool keys[256], specialKeys[256]; // Store key states so that 
@@ -60,6 +71,8 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+
+	float iniWidth, finWidth, iniHeight, finHeight;
 };
 
 

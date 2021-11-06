@@ -4,7 +4,7 @@
 #include "Button.h"
 #include <iostream>
 
-void Button::init(ShaderProgram& shaderProgram, float inix, float iniy, float fix, float fiy)
+void Button::init(ShaderProgram& shaderProgram, float inix, float iniy, float fix, float fiy, string path)
 {
 	geom[0].x = inix;
 	geom[0].y = iniy;
@@ -15,7 +15,7 @@ void Button::init(ShaderProgram& shaderProgram, float inix, float iniy, float fi
 
 
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, shaderProgram);
-	texs.loadFromFile("images/button.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	texs.loadFromFile(path, TEXTURE_PIXEL_FORMAT_RGBA);
 }
 void Button::render()
 {
