@@ -119,12 +119,7 @@ void PlayerA::update(int deltaTime)
 			bJumping = false;
 		}
 
-		if (jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
-
-		}
+		
 		else
 		{
 			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));

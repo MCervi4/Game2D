@@ -118,10 +118,7 @@ void PlayerB::update(int deltaTime)
 			bJumping = false;
 		}
 
-		if (jumpAngle == 180)
-		{
-			bJumping = false;
-		}
+		
 		else
 		{
 			posPlayer.y = int(startY + 96 * sin(3.14159f * jumpAngle / 180.f));
@@ -139,7 +136,6 @@ void PlayerB::update(int deltaTime)
 		posPlayer.y -= FALL_STEP;
 		if (map1->collisionMoveDownB(posPlayer, glm::ivec2(11, 30), &posPlayer.y, damuntMeta))
 		{
-			posPlayer.y += FALL_STEP;
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
