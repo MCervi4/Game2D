@@ -10,6 +10,7 @@
 #include "PlayerB.h"
 #include "Menu.h"
 #include "TexturedQuad.h"
+#include "Button.h"
 
 
 // Scene contains all the entities of our game.
@@ -24,10 +25,11 @@ public:
 	~Scene();
 
 	void init(ShaderProgram game_texprogram, int lvl);
-	void update(int deltaTime);
+	void update(int deltaTime, float iniW, float finW, float iniH, float finH);
 	void render();
 	void switchGodmode();
 	void setLevel(const int& lvl);
+
 
 	float getPlayerAPosX();
 	float getPlayerBPosX();
@@ -51,6 +53,11 @@ private:
 	Player* playerA;
 	Player* playerB;
 	ShaderProgram texProgram;
+
+	Texture texs;
+	TexturedQuad* texQuad;
+
+	Button returnbut;
 	//float currentTime;
 	//glm::mat4 projection;
 

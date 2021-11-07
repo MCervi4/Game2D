@@ -51,6 +51,7 @@ public:
 
 private:
 	void initShaders();
+	bool returnPressed(int x, int y);
 
 private:
 
@@ -62,6 +63,7 @@ private:
 	Instructions instr;
 	Credits credits;
 	Levels levels;
+
 	
 	GameState gamestate;
 	bool keys[256], specialKeys[256]; // Store key states so that 

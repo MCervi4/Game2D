@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TexturedQuad.h"
+#include "Button.h"
 
 
 class Instructions
@@ -15,9 +16,9 @@ public:
 
 private:
 
-	Texture texs;
-	TexturedQuad* texQuad;
-
+	Texture texs[3];
+	TexturedQuad* texQuad[3];
+	Button returnbut;
 };
 
 #endif

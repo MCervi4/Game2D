@@ -9,18 +9,9 @@ void Menu::init(ShaderProgram& shaderProgram) {
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
 
-	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, shaderProgram);
-	texs[0].loadFromFile("images/background.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, shaderProgram);
+	texs.loadFromFile("images/background_title.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
-	//TITLE
-	geom[0].x = 170.f;
-	geom[0].y = 30.f;
-	geom[1].x = 450.f;
-	geom[1].y = 110.f;
-	//glm::vec2 geom[2] = { glm::vec2(30.f, 30.f), glm::vec2(150, 60) };
-
-	texQuad[1] = TexturedQuad::createTexturedQuad(geom, texCoords, shaderProgram);
-	texs[1].loadFromFile("images/aval.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
 	//BUTTONS
 	start.init(shaderProgram, 220.f, 220.f, 420.f, 280.f, "images/start.png");
@@ -34,8 +25,7 @@ void Menu::init(ShaderProgram& shaderProgram) {
 
 
 void Menu::render() {
-	texQuad[0]->render(texs[0]);
-	texQuad[1]->render(texs[1]);
+	texQuad->render(texs);
 	start.render();
 	howtoplay.render();
 	levels.render();

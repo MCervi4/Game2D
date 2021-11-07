@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TexturedQuad.h"
+#include "Button.h"
 
 
 class Credits
@@ -17,6 +18,8 @@ private:
 
 	Texture texs;
 	TexturedQuad* texQuad;
+
+	Button returnbut;
 
 };
 

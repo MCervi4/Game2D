@@ -33,8 +33,7 @@ bool Game::update(int deltaTime)
 	currentTime += deltaTime;
 
 	if (gamestate == SCENE) {
-		scene.update(deltaTime);
-
+		scene.update(deltaTime, iniWidth, finWidth, iniHeight, finHeight);
 		float playersPosX = scene.getPlayersPosX();// +float(SCREEN_WIDTH) / 10.f;
 		float playersPosY = scene.getPlayersPosY();// +float(SCREEN_HEIGHT) / 10.f;
 
@@ -90,6 +89,7 @@ void Game::keyPressed(int key)
 	case '1':
 		gamestate = SCENE;
 		scene.init(texProgram, 1);
+
 		break;
 
 	case '2':
@@ -173,6 +173,51 @@ void Game::mousePress(int button, int x, int y)
 			}
 		}
 	}
+	else if (gamestate == LEVELS)
+	{
+		if (button == 0)
+		{
+			int whereToGo = levels.whereToGo(x, y);
+			switch (whereToGo)
+			{
+			case 0:
+				break;
+			case 1:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			case 2:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			case 3:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			case 4:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			case 5:
+				gamestate = SCENE;
+				scene.init(texProgram, whereToGo);
+				break;
+			case 6:
+				gamestate = MENU;
+				menu.init(texProgram);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	if (returnPressed(x, y)) {
+		gamestate = MENU;
+		menu.init(texProgram);
+	}
+	
+	
 }
 
 void Game::mouseRelease(int button)
@@ -219,6 +264,9 @@ void Game::initShaders()
 	fShader.free();
 }
 
+bool Game::returnPressed(int x, int y) {
+	return x >= 10 && x <= 100 && y >= 440 && y <= 470;
+}
 
 
 

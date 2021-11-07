@@ -30,6 +30,5 @@ bool Button::isPressed(int x, int y)
 	int geom0y = geom[0].y;
 	int geom1x = geom[1].x;
 	int geom1y = geom[1].y;
-	bool boolea = (x >= geom[0].x && x <= geom[1].x && y >= geom[0].y && y <= geom[1].y);
 	return x >= geom[0].x && x <= geom[1].x && y >= geom[0].y && y <= geom[1].y;
 }
