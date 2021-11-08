@@ -49,6 +49,15 @@ bool Player::isDeath() {
 
 void Player::switchGodmode() {
 	godMode = !godMode;
+	lavaWalk = !lavaWalk;
+}
+
+void Player::activateLavaWalk() {
+	lavaWalk = true;
+}
+
+void Player::deactivateLavaWalk() {
+	lavaWalk = false;
 }
 
 float Player::getPosX() {
@@ -59,6 +68,8 @@ float Player::getPosY() {
 	return posPlayer.y;
 }
 
-
+void Player::setLevelFinished() {
+	levelFinished = true;
+}
 
 

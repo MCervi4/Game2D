@@ -10,9 +10,8 @@
 class Credits
 {
 public:
-	void init(ShaderProgram& shaderProgram);
+	void init(ShaderProgram& shaderProgram, bool final1);
 	void render();
-
 
 private:
 
@@ -20,6 +19,8 @@ private:
 	TexturedQuad* texQuad;
 
 	Button returnbut;
+
+	bool isFinal;
 
 };
 

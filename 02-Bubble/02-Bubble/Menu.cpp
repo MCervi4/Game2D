@@ -17,6 +17,7 @@ void Menu::init(ShaderProgram& shaderProgram) {
 	start.init(shaderProgram, 220.f, 220.f, 420.f, 280.f, "images/start.png");
 	howtoplay.init(shaderProgram, 220.f, 300.f, 420.f, 360.f, "images/howtoplay.png");
 	levels.init(shaderProgram, 220.f, 380.f, 420.f, 440.f, "images/levels.png");
+	credits.init(shaderProgram, 520.f, 430.f, 620.f, 460.f, "images/credits.png");
 	exit.init(shaderProgram, 20.f, 410.f, 70.f, 460.f, "images/exit.png");
 
 
@@ -29,6 +30,7 @@ void Menu::render() {
 	start.render();
 	howtoplay.render();
 	levels.render();
+	credits.render();
 	exit.render();
 }
 
@@ -37,6 +39,7 @@ int Menu::whereToGo(int x, int y)
 	if (start.isPressed(x, y)) return 1;
 	else if (howtoplay.isPressed(x, y)) return 2;
 	else if (levels.isPressed(x, y)) return 3;
-	else if (exit.isPressed(x, y)) return 4;
+	else if (credits.isPressed(x, y)) return 4;
+	else if (exit.isPressed(x, y)) return 5;
 	return 0;
 }

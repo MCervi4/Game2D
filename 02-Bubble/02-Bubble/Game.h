@@ -11,7 +11,7 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 20
+#define JUMP_HEIGHT 70
 #define FALL_STEP 4
 #define ASPECT_RATIO 1.33f
 

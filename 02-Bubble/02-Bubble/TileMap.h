@@ -34,12 +34,19 @@ public:
 	bool collisionMoveDownB(const glm::ivec2& pos, const glm::ivec2& size, int* posY, bool& damuntMeta) const;
 	bool collisionMoveUpA(const glm::ivec2& pos, const glm::ivec2& size) const;
 	bool collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool deathcollision(const glm::ivec2& pos, const glm::ivec2& size, const bool& godMode) const;
+	bool deathcollisionA(const glm::ivec2& pos, const glm::ivec2& size, const bool& godMode, const bool& lavaWalk) const;
+	bool deathcollisionB(const glm::ivec2& pos, const glm::ivec2& size, const bool& godMode, const bool& lavaWalk) const;
+	bool lavaWalkA(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+	bool lavaWalkB(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 
+	void gemcollision(const glm::ivec2& pos, const glm::ivec2& size, float& saltAlt, bool& lavaWalk);
+
+	bool getRecargar();
+	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 private:
+
 	bool loadLevel(const string& levelFile);
-	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 private:
 	GLuint vao;
@@ -50,6 +57,8 @@ private:
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int* map;
+
+	bool recargar;
 
 };
 

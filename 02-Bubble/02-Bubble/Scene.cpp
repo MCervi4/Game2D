@@ -8,11 +8,11 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
-#define INIT_PLAYERA_X_TILES 8
-#define INIT_PLAYERA_Y_TILES 7
+#define INIT_PLAYERA_X_TILES 35
+#define INIT_PLAYERA_Y_TILES 15
 
-#define INIT_PLAYERB_X_TILES 8
-#define INIT_PLAYERB_Y_TILES 20
+#define INIT_PLAYERB_X_TILES 35
+#define INIT_PLAYERB_Y_TILES 38
 
 Scene::Scene()
 {
@@ -42,6 +42,7 @@ void Scene::init(ShaderProgram game_texprogram, int level)
 {
 	texProgram = game_texprogram;
 	currentLevel = level;
+	isFinal = false;
 	
 	string lvl = to_string(currentLevel);
 
@@ -56,9 +57,9 @@ void Scene::init(ShaderProgram game_texprogram, int level)
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 	texs.loadFromFile("images/background.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
-	map1 = TileMap::createTileMap(loadedMap1, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //terra
-	map2 = TileMap::createTileMap(loadedMap2, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //mata
 	map3 = TileMap::createTileMap(loadedMap3, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //nomata
+	map2 = TileMap::createTileMap(loadedMap2, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //mata
+	map1 = TileMap::createTileMap(loadedMap1, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //terra
 
 	playerA = new PlayerA();
 	playerA->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -78,41 +79,36 @@ void Scene::init(ShaderProgram game_texprogram, int level)
 
 void Scene::update(int deltaTime, float iniW, float finW, float iniH, float finH)
 {
-	//currentTime += deltaTime;
-	playerA->update(deltaTime);
-	playerB->update(deltaTime);
+		//currentTime += deltaTime;
+		playerA->update(deltaTime);
+		playerB->update(deltaTime);
 
-	glm::vec2 geom[2] = { glm::vec2(iniW - 2, iniH - 2), glm::vec2(finW + 2, finH + 2) };
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
-	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+		glm::vec2 geom[2] = { glm::vec2(iniW - 2, iniH - 2), glm::vec2(finW + 2, finH + 2) };
+		glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };
+		texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
 
 
-	if (playerA->isDeath() || playerB->isDeath()) init(texProgram, currentLevel);
+		if (playerA->isDeath() || playerB->isDeath()) init(texProgram, currentLevel);
 
-	if (playerA->getDamuntMeta()) {
-		if (currentLevel == 5) init(texProgram, currentLevel = 1);
-		else  init(texProgram, ++currentLevel);
-	}
+		if (playerA->getDamuntMeta() && playerB->getDamuntMeta()) {
+			playerA->setLevelFinished();
+			playerB->setLevelFinished();
+			if (currentLevel == 5) isFinal = true;
+			else  init(texProgram, ++currentLevel);
+		}
+
+		if (map3->getRecargar()) map3->prepareArrays(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 }
 
 void Scene::render()
 {
-	/*glm::mat4 modelview;
-
-	texProgram.use();
-	texProgram.setUniformMatrix4f("projection", projection);
-	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
-	texProgram.setUniformMatrix4f("modelview", modelview);
-	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);*/
-	//returnbut.render();
-
 	texQuad->render(texs);
 
-	map1->render();
-	map2->render();
 	map3->render();
+	map2->render();
+	map1->render();
+	
 	playerA->render();
 	playerB->render();
 
@@ -152,4 +148,9 @@ float Scene::getPlayersPosX() {
 float Scene::getPlayersPosY() {
 	return (playerA->getPosY() + playerB->getPosY()) / 2.f;
 
+}
+
+bool Scene::getFinal()
+{
+	return isFinal;
 }

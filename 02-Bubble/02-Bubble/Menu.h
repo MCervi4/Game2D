@@ -26,6 +26,7 @@ private:
 	Button start;
 	Button howtoplay;
 	Button levels;
+	Button credits;
 	Button exit;
 	//glm::mat4 projection;
 };

@@ -21,6 +21,9 @@ public:
 	void setTileMap(TileMap* tileMap1, TileMap* tileMap2, TileMap* tileMap3);
 	void setPosition(const glm::vec2& pos);
 	void switchGodmode();
+	void activateLavaWalk();
+	void deactivateLavaWalk();
+	void setLevelFinished();
 
 	bool getDamuntMeta();
 	bool isDeath();
@@ -30,7 +33,9 @@ public:
 
 
 protected:
-	bool bJumping, damuntMeta, death, godMode;
+	bool bJumping, damuntMeta, death, godMode, lavaWalk, saltAlt, levelFinished;
+
+	float jumpH;
 
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;

@@ -30,6 +30,8 @@ public:
 	void switchGodmode();
 	void setLevel(const int& lvl);
 
+	bool getFinal();
+
 
 	float getPlayerAPosX();
 	float getPlayerBPosX();
@@ -63,6 +65,8 @@ private:
 
 
 	int currentLevel;
+
+	bool isFinal;
 
 };
 

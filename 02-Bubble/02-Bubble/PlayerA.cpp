@@ -6,11 +6,6 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT
@@ -22,6 +17,11 @@ void PlayerA::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bJumping = false;
 	damuntMeta = false;
 	death = false;
+	lavaWalk = false;
+	saltAlt = false;
+	levelFinished = false;
+	jumpH = JUMP_HEIGHT;
+
 
 	spritesheet.loadFromFile("images/messi.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(40, 40), glm::vec2(1. / 9., 1. / 9.), &spritesheet, &shaderProgram);
@@ -77,7 +77,8 @@ void PlayerA::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
-	death = map2->deathcollision(posPlayer, glm::ivec2(11, 32), godMode);
+	death = map2->deathcollisionA(posPlayer, glm::ivec2(11, 32), godMode, lavaWalk);
+	map3->gemcollision(posPlayer, glm::ivec2(11, 32), jumpH, lavaWalk);
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
@@ -122,9 +123,14 @@ void PlayerA::update(int deltaTime)
 		
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90)
-				bJumping = !map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta);
+			if (jumpAngle < 120) posPlayer.y = int(startY - jumpH * sin(3.14159f * jumpAngle / 180.f));
+			else posPlayer.y += FALL_STEP;
+			if (jumpAngle > 90) {
+				bool downCondition;
+				if (!lavaWalk) downCondition = map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta);
+				else downCondition = map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta) || map2->lavaWalkA(posPlayer, glm::ivec2(11, 32), &posPlayer.y);
+				bJumping = !downCondition;
+			}
 		}
 	}
 	else
@@ -135,7 +141,12 @@ void PlayerA::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 		
 		posPlayer.y += FALL_STEP;
-		if (map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta))
+
+		bool downCondition;
+		if (!lavaWalk) downCondition = map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta);
+		else downCondition = map1->collisionMoveDownA(posPlayer, glm::ivec2(11, 32), &posPlayer.y, damuntMeta) || map2->lavaWalkA(posPlayer, glm::ivec2(11, 32), &posPlayer.y);
+		
+		if (downCondition)
 		{
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{

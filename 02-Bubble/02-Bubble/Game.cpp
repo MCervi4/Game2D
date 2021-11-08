@@ -44,6 +44,12 @@ bool Game::update(int deltaTime)
 		finHeight = playersPosY + float(SCREEN_HEIGHT) * 0.6f;
 
 		projection = glm::ortho(iniWidth, finWidth, finHeight, iniHeight);
+
+		if (scene.getFinal() == true)
+		{
+			gamestate = CRED;
+			credits.init(texProgram, true);
+		}
 	}
 	else {
 		iniWidth = 0.f;
@@ -83,40 +89,45 @@ void Game::keyPressed(int key)
 {
 	if(key == 27) // Escape code
 		bPlay = false;
-
-	switch (key)
+	if (gamestate == SCENE)
 	{
-	case '1':
-		gamestate = SCENE;
-		scene.init(texProgram, 1);
+		switch (key)
+		{
+		case '1':
+			scene.init(texProgram, 1);
 
-		break;
+			break;
 
-	case '2':
-		gamestate = SCENE;
-		scene.init(texProgram, 2);
-		break;
+		case '2':
+			scene.init(texProgram, 2);
+			break;
 
-	case '3':
-		gamestate = SCENE;
-		scene.init(texProgram, 3);
-		break;
+		case '3':
+			scene.init(texProgram, 3);
+			break;
 
-	case '4':
-		gamestate = SCENE;
-		scene.init(texProgram, 4);
-		break;
+		case '4':
+			scene.init(texProgram, 4);
+			break;
 
-	case '5':
-		gamestate = SCENE;
-		scene.init(texProgram, 5);
-		break;
+		case '5':
+			scene.init(texProgram, 5);
+			break;
 
-	case 'g':
-		scene.switchGodmode();
-		break;
+		case 'g':
+			scene.switchGodmode();
+			break;
+		case 'm':
+			//MUTEJAR MUSICA
+			break;
+		case 'b':
+			gamestate = MENU;
+			menu.init(texProgram);
+			break;
+		default:
+			break;
+		}
 	}
-
 
 
 	keys[key] = true;
@@ -165,7 +176,11 @@ void Game::mousePress(int button, int x, int y)
 				gamestate = LEVELS;
 				levels.init(texProgram);
 				break;
-			case 4: //exit
+			case 4: //credits
+				gamestate = CRED;
+				credits.init(texProgram, false);
+				break;
+			case 5: //exit
 				bPlay = false;
 				break;
 			default:
